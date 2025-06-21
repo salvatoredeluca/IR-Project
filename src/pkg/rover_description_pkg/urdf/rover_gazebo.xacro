@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="rover_gazebo">
 
-<xacro:macro name="rover_wheels_sim" params="left_joint right_joint">
-    <link name="fr_wheel_link">
+<xacro:macro name="rover_wheels_sim" params="left_joint right_joint prefix">
+    <link name="${prefix}_fr_wheel_link">
         <visual>
             <origin xyz="0 0 0" rpy="-1.57 0 0" />
             <geometry>
@@ -24,14 +24,14 @@
         </inertial>
         <mu>5.0</mu>
     </link>
-    <joint name="fr_wheel_to_base" type="continuous">
-        <parent link="base_link"/> 
-        <child link="fr_wheel_link"/>
+    <joint name="${prefix}_fr_wheel_to_base" type="continuous">
+        <parent link="${prefix}_base_link"/> 
+        <child link="${prefix}_fr_wheel_link"/>
         <axis xyz="0 1 0"/>
         <origin xyz="${wheel_x_offset + front_flipper_x_offset} ${-wheel_y_offset} 0" rpy="0 0 0"/>
     </joint>
 
-    <link name="fl_wheel_link">
+    <link name="${prefix}_fl_wheel_link">
         <visual>
             <origin xyz="0 0 0" rpy="1.57 0 0" />
             <geometry>
@@ -53,14 +53,14 @@
         </inertial>
         <mu>5.0</mu>
     </link>
-    <joint name="fl_wheel_to_base" type="continuous">
-        <parent link="base_link"/>
-        <child link="fl_wheel_link"/>
+    <joint name="${prefix}_fl_wheel_to_base" type="continuous">
+        <parent link="${prefix}_base_link"/>
+        <child link="${prefix}_fl_wheel_link"/>
         <axis xyz="0 1 0"/>
         <origin xyz="${wheel_x_offset + front_flipper_x_offset} ${wheel_y_offset} 0" rpy="0 0 0"/>
     </joint>
 
-    <link name="rr_wheel_link">
+    <link name="${prefix}_rr_wheel_link">
         <visual>
             <origin xyz="0 0 0" rpy="1.57 0 3.1415" />
             <geometry>
@@ -82,14 +82,14 @@
         </inertial>
         <mu>5.0</mu>
     </link>
-    <joint name="rr_wheel_to_base" type="continuous">
-        <parent link="base_link"/>
-        <child link="rr_wheel_link"/>
+    <joint name="${prefix}_rr_wheel_to_base" type="continuous">
+        <parent link="${prefix}_base_link"/>
+        <child link="${prefix}_rr_wheel_link"/>
         <axis xyz="0 1 0"/>
         <origin xyz="${-wheel_x_offset} ${-wheel_y_offset} 0"/>
     </joint>
 
-    <link name="rl_wheel_link">
+    <link name="${prefix}_rl_wheel_link">
         <visual>
             <origin xyz="0 0 0" rpy="-1.57 0 3.1415" />
             <geometry>
@@ -111,16 +111,16 @@
         </inertial>
         <mu>5.0</mu>
     </link>
-    <joint name="rl_wheel_to_base" type="continuous">
-        <parent link="base_link"/>
-        <child link="rl_wheel_link"/>
+    <joint name="${prefix}_rl_wheel_to_base" type="continuous">
+        <parent link="${prefix}_base_link"/>
+        <child link="${prefix}_rl_wheel_link"/>
         <axis xyz="0 1 0"/>
         <origin xyz="${-wheel_x_offset} ${wheel_y_offset} 0"/>
     </joint>
 </xacro:macro>
 
 <!-- Camera -->
-<xacro:macro name="camera_gazebo" params="camera_base_frame camera_topic camera_info_topic">
+<xacro:macro name="camera_gazebo" params="camera_base_frame camera_topic camera_info_topic prefix">
     <xacro:include filename="$(find realsense2_description)/urdf/_d435i.urdf.xacro"/>
 
     <!-- <xacro:sensor_d435i parent="${camera_base_frame}" use_nominal_extrinsics="true">
@@ -130,7 +130,7 @@
 
     <joint name="camera_to_payload" type="fixed">
         <origin xyz="0.02 0 ${1 -0.129 - total_height}" rpy="0 0 0"/>
-        <parent link="payload_link"/>
+        <parent link="${prefix}_payload_link"/>
         <child link="${camera_base_frame}"/>
     </joint>
 
@@ -241,16 +241,16 @@
 </xacro:macro>
 
     <!-- Gazebo Plugins -->
-<xacro:macro name="gazebo_diff_drive_controller" params="left_joint right_joint">
+<xacro:macro name="gazebo_diff_drive_controller" params="left_joint right_joint namespace prefix">
 
     <gazebo>
         <plugin name="ignition::gazebo::systems::DiffDrive" filename="ignition-gazebo-diff-drive-system"> 
             <num_wheel_pairs>2</num_wheel_pairs>
             <!-- Wheel Information -->
-            <left_joint>rl_wheel_to_base</left_joint>
-            <left_joint>fl_wheel_to_base</left_joint>
-            <right_joint>rr_wheel_to_base</right_joint>
-            <right_joint>fr_wheel_to_base</right_joint>
+            <left_joint>${prefix}_rl_wheel_to_base</left_joint>
+            <left_joint>${prefix}_fl_wheel_to_base</left_joint>
+            <right_joint>${prefix}_rr_wheel_to_base</right_joint>
+            <right_joint>${prefix}_fr_wheel_to_base</right_joint>
             <wheel_separation>0.37</wheel_separation>
             <wheel_radius>0.102</wheel_radius>
 
@@ -262,18 +262,20 @@
 
             
             <!-- Output -->
-            <frame_id>rover/odom</frame_id>
-            <child_frame_id>rover/base_link</child_frame_id>
+            <frame_id>${namespace}odom</frame_id>
+            <child_frame_id>/${prefix}_base_link</child_frame_id>
 
             <!-- Topics -->
-            <topic>cmd_vel</topic>
-            <odom_topic>/odom/wheels</odom_topic>
-            <tf_topic>/tf_gazebo</tf_topic>
+            <topic>/${namespace}cmd_vel</topic>
+            <odom_topic>/${namespace}odom/wheels</odom_topic>
+            <tf_topic>/${namespace}tf_gazebo</tf_topic>
+
+
 
         </plugin>
 
         <plugin filename="ignition-gazebo-joint-state-publisher-system" name="ignition::gazebo::systems::JointStatePublisher">
-            <topic>/joint_states</topic>
+            <topic>/${namespace}joint_states</topic>
         </plugin>      
 
     </gazebo>
@@ -281,8 +283,8 @@
 
 
 
-<xacro:macro name="gazebo_wheel_contact">
-    <gazebo reference="diff_wheel_left">
+<xacro:macro name="gazebo_wheel_contact" params="prefix">
+    <gazebo reference="${prefix}_diff_wheel_left">
         <mu1 value="1.0"/>
         <mu2 value="1.0"/>
         <kp value="1e15"/>
@@ -290,7 +292,7 @@
         <fdir1 value="0 0 1"/>
     </gazebo>
 
-    <gazebo reference="diff_wheel_right">
+    <gazebo reference="${prefix}_diff_wheel_right">
         <mu1 value="1.0"/>
         <mu2 value="1.0"/>
         <kp value="1e15"/>
@@ -298,7 +300,7 @@
         <fdir1 value="0 0 1"/>
     </gazebo>
 
-    <gazebo reference="collision_f_l">
+    <gazebo reference="${prefix}_collision_f_l">
         <mu1 value="0.1"/>
         <mu2 value="0.1"/>
         <kp value="10000000.0"/>
@@ -306,7 +308,7 @@
         <minDepth>0.001</minDepth>
     </gazebo>
 
-    <gazebo reference="collision_f_r">
+    <gazebo reference="${prefix}_collision_f_r">
         <mu1 value="0.1"/>
         <mu2 value="0.1"/>
         <kp value="10000000.0"/>
@@ -314,7 +316,7 @@
         <minDepth>0.001</minDepth>
     </gazebo>
 
-    <gazebo reference="collision_b_l">
+    <gazebo reference="${prefix}_collision_b_l">
         <mu1 value="0.1"/>
         <mu2 value="0.1"/>
         <kp value="10000000.0"/>
@@ -322,7 +324,7 @@
         <minDepth>0.001</minDepth>
     </gazebo>
 
-    <gazebo reference="collision_b_r">
+    <gazebo reference="${prefix}_collision_b_r">
         <mu1 value="0.1"/>
         <mu2 value="0.1"/>
         <kp value="10000000.0"/>
