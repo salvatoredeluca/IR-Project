@@ -67,8 +67,7 @@ def generate_launch_description():
             package="ros_gz_bridge",
             executable="parameter_bridge",
             
-            arguments=[
-            
+            arguments=[          
                 "/master/cmd_vel@geometry_msgs/msg/Twist@ignition.msgs.Twist",
                 "/slave/cmd_vel@geometry_msgs/msg/Twist@ignition.msgs.Twist",               
                 "clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock",
@@ -80,13 +79,15 @@ def generate_launch_description():
                 '/slave/joint_states@sensor_msgs/msg/JointState[gz.msgs.Model',
                 '/master/scan@sensor_msgs/msg/LaserScan@gz.msgs.LaserScan',
                 '/slave/scan@sensor_msgs/msg/LaserScan@gz.msgs.LaserScan',
+                '/slave/imu/data@sensor_msgs/msg/Imu@gz.msgs.IMU',
+                '/master/imu/data@sensor_msgs/msg/Imu@gz.msgs.IMU',
+                
 
                 #camera topics (only master)
                 '/color/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
                 '/depth/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
                 '/color/image_raw@sensor_msgs/msg/Image@ignition.msgs.Image',
-                '/depth/color/points@sensor_msgs/msg/PointCloud2@ignition.msgs.PointCloudPacked',
-                
+                '/depth/color/points@sensor_msgs/msg/PointCloud2@ignition.msgs.PointCloudPacked',               
             ],
             
         

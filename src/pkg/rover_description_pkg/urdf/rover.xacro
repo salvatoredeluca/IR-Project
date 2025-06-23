@@ -7,8 +7,14 @@
 <xacro:include filename="$(find rover_description_pkg)/urdf/utilities.xacro"/>
 <xacro:include filename="$(find rover_description_pkg)/urdf/rover_gazebo.xacro"/>
 
+<xacro:include filename="$(find rover_description_pkg)/urdf/imu.urdf" />
+
+
+
+
 <xacro:arg name="is_sim" default="true"/>
 <xacro:arg name="namespace" default="/" />
+
 
 
 <xacro:rover_base_frame prefix="$(arg prefix)"/>
@@ -20,6 +26,8 @@
 <xacro:if value="$(eval prefix == 'master')">
   <xacro:camera_gazebo camera_base_frame="camera_link" camera_topic="camera" camera_info_topic="camera_info" prefix="$(arg prefix)"/>
 </xacro:if>
+
+<xacro:imu_macro prefix="$(arg prefix)"/>
 
 
 <!-- if it is in simulation -->
