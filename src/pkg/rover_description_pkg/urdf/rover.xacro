@@ -10,6 +10,7 @@
 <xacro:include filename="$(find rover_description_pkg)/urdf/imu.urdf" />
 
 
+<xacro:include filename="$(find rover_description_pkg)/urdf/imu.urdf" />
 
 
 <xacro:arg name="is_sim" default="true"/>
@@ -23,9 +24,9 @@
 <xacro:gazebo_diff_drive_controller left_joint="diff_drive_l_joint" right_joint="diff_drive_r_joint" prefix= "$(arg prefix)" namespace="$(arg namespace)" />
 <xacro:gazebo_wheel_contact prefix="(arg prefix)"/>
 
-<xacro:if value="$(eval prefix == 'master')">
-  <xacro:camera_gazebo camera_base_frame="camera_link" camera_topic="camera" camera_info_topic="camera_info" prefix="$(arg prefix)"/>
-</xacro:if>
+
+<xacro:camera_gazebo camera_base_frame="camera_link" camera_topic="camera" camera_info_topic="camera_info" prefix="$(arg prefix)"/>
+
 
 <xacro:imu_macro prefix="$(arg prefix)"/>
 

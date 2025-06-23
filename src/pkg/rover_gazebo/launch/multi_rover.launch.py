@@ -84,10 +84,17 @@ def generate_launch_description():
                 
 
                 #camera topics (only master)
-                '/color/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
-                '/depth/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
-                '/color/image_raw@sensor_msgs/msg/Image@ignition.msgs.Image',
-                '/depth/color/points@sensor_msgs/msg/PointCloud2@ignition.msgs.PointCloudPacked',               
+                'master/color/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
+                'master/depth/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
+                'master/color/image_raw@sensor_msgs/msg/Image@ignition.msgs.Image',
+                'master/depth/color/points@sensor_msgs/msg/PointCloud2@ignition.msgs.PointCloudPacked',  
+                'slave/color/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
+                'slave/depth/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
+                'slave/color/image_raw@sensor_msgs/msg/Image@ignition.msgs.Image',
+                'slave/depth/color/points@sensor_msgs/msg/PointCloud2@ignition.msgs.PointCloudPacked',  
+
+
+
             ],
             
         
