@@ -1,9 +1,9 @@
 bt_navigator:
   ros__parameters:
     use_sim_time: True
-    global_frame: rover/map
-    robot_base_frame: rover/base_footprint
-    odom_topic: /odom/wheels
+    global_frame: master/map
+    robot_base_frame: master/base_footprint
+    odom_topic: master/odom
     bt_loop_duration: 10
     default_server_timeout: 20
     # 'default_nav_through_poses_bt_xml' and 'default_nav_to_pose_bt_xml' are use defaults:
@@ -70,7 +70,7 @@ bt_navigator_navigate_to_pose_rclcpp_node:
 controller_server:
   ros__parameters:
     use_sim_time: True
-    odom_topic: /odom/wheels
+    odom_topic: master/odom
     controller_frequency: 10.0 # was 20/50.0
     min_x_velocity_threshold: 0.001
     min_y_velocity_threshold: 0.5
@@ -98,7 +98,7 @@ controller_server:
       yaw_goal_tolerance: 0.15
     FollowPath:
           plugin: "teb_local_planner::TebLocalPlannerROS"
-          map_frame: rover/map
+          map_frame: master/map
 
           # Trajectory
           teb_autosize: 1.0 
@@ -168,8 +168,8 @@ local_costmap:
     ros__parameters:
       update_frequency: 10.0
       publish_frequency: 5.0
-      global_frame: rover/odom
-      robot_base_frame: rover/base_footprint
+      global_frame: master/odom
+      robot_base_frame: master/base_footprint
       use_sim_time: True
       rolling_window: true
       width: 6
@@ -196,7 +196,7 @@ local_costmap:
         mark_threshold: 0
         observation_sources: scan
         scan:
-          topic: /scan
+          topic: master/scan
           max_obstacle_height: 2.0
           clearing: True
           marking: True
@@ -222,8 +222,8 @@ global_costmap:
     ros__parameters:
       update_frequency: 2.0
       publish_frequency: 1.0
-      global_frame: rover/map
-      robot_base_frame: rover/base_footprint
+      global_frame: master/map
+      robot_base_frame: master/base_footprint
       use_sim_time: True
       robot_radius: 0.3
       resolution: 0.05
@@ -239,7 +239,7 @@ global_costmap:
         footprint_clearing_enabled: True
         observation_sources: scan
         scan:
-          topic: /scan
+          topic: master/scan
           max_obstacle_height: 2.0
           clearing: True
           marking: True
@@ -315,8 +315,8 @@ behavior_server:
       plugin: "nav2_behaviors/Wait"
     assisted_teleop:
       plugin: "nav2_behaviors/AssistedTeleop"
-    global_frame: rover/odom
-    robot_base_frame: rover/base_footprint
+    global_frame: master/odom
+    robot_base_frame: master/base_footprint
     transform_tolerance: 0.1
     use_sim_time: True
     simulate_ahead_time: 2.0
@@ -349,7 +349,7 @@ velocity_smoother:
     min_velocity: [-0.3, 0.0, -2.0]
     max_accel: [0.1, 0.0, 1.0]
     max_decel: [-1.0, 0.0, -1.0]
-    odom_topic: "odom/wheels"
+    odom_topic: "master/odom/wheels"
     odom_duration: 0.1
     deadband_velocity: [0.0, 0.0, 0.0]
     velocity_timeout: 1.0

@@ -1,37 +1,33 @@
 <?xml version="1.0"?>
+
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="imu">
 
-<xacro:macro name="imu_macro" params="prefix">
+    <xacro:macro name="imu_macro" params="namespace">
     
-    <link name="${prefix}_imu_link"/>
+        <link name="imu_link"/>
 
-    <joint name="${prefix}_imu_to_payload" type="fixed">
-      <parent link="${prefix}_base_link"/>
-     
-      <child link="${prefix}_imu_link"/>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-    </joint>
+        <joint name="imu_to_payload" type="fixed">
+            <parent link="base_link"/>
+            <child link="imu_link"/>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </joint>
 
-    <gazebo reference="${prefix}_imu_link">
-      <sensor name="${prefix}_imu" type="imu">
-        <always_on>1</always_on>
-        <update_rate>10</update_rate>
-        <visualize>true</visualize>
-        <topic>${prefix}/imu/data</topic>
-        <enable_metrics>true</enable_metrics>
-        <ignition_frame_id>${prefix}_imu_link</ignition_frame_id>
-        <gz_frame_id>${prefix}_imu_link</gz_frame_id>
+        <gazebo reference="imu_link">
+            <sensor name="imu" type="imu">
+                <always_on>1</always_on>
+                <update_rate>10</update_rate>
+                <visualize>true</visualize>
+               
+                <enable_metrics>true</enable_metrics>
+                <ignition_frame_id>${namespace}/imu_link</ignition_frame_id>
+                <gz_frame_id>${namespace}/imu_link</gz_frame_id>
+            </sensor>
+        </gazebo>
 
+        <gazebo>
+            <plugin filename="libignition-gazebo-imu-system" name="ignition::gazebo::systems::Imu"/>
+        </gazebo>
 
-        
-   
-      </sensor>
-    </gazebo>
-
-    <gazebo>
-      <plugin filename="libignition-gazebo-imu-system" name="ignition::gazebo::systems::Imu"/>
-    </gazebo>
-
-  </xacro:macro>
+    </xacro:macro>
 
 </robot>

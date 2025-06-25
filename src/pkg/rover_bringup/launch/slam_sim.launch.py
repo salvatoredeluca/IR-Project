@@ -41,7 +41,20 @@ def generate_launch_description():
         package='slam_toolbox',
         executable='async_slam_toolbox_node',
         name='slam_toolbox',
-        output='screen')
+
+        # namespace='master/',
+        output='screen',
+        remappings=[('/map',['/master/map'])]
+        # remappings=[
+            
+        #             ('/map', ['/master/map']),
+        #             ('/pose', ['/master/pose_slam']),
+        #             ('scan','scan')
+        #             ],
+        
+        
+        # 
+    )
 
     ld = LaunchDescription()
 

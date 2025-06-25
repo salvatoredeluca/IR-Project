@@ -29,8 +29,17 @@ def generate_launch_description():
     	executable='ekf_node',
     	name='ekf_filter_node',
     	output='screen',
+        # namespace='master/',
+        # remappings=[
+            
+        #             ('/map', ['/master/map']),
+        #             ('/pose', ['/master/pose_slam']),
+        #             ('/scan',['/master/scan'])
+        #             ],
+
     	parameters=[robot_localization_file_path, {'use_sim_time': use_sim_time}]
     	)
+    
     
     ld = LaunchDescription()
 

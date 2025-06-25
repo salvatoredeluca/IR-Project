@@ -10,10 +10,12 @@ slam_toolbox:
     ceres_loss_function: None
 
     # ROS Parameters
-    odom_frame: rover/odom
-    map_frame: rover/map
-    base_frame: rover/base_footprint
-    scan_topic: /scan
+    publish_tf: true
+    odom_frame: master/odom
+    map_frame: master/map
+    base_frame: master/base_footprint
+    scan_topic: master/scan
+   
     #use_map_saver: true
     mode: mapping
 
@@ -44,7 +46,7 @@ slam_toolbox:
     use_scan_barycenter: true
     minimum_travel_distance: 0.25
     minimum_travel_heading: 0.25
-    scan_buffer_size: 5
+    scan_buffer_size: 10
     scan_buffer_maximum_scan_distance: 10.0
     link_match_minimum_response_fine: 0.1  
     link_scan_maximum_distance: 1.5

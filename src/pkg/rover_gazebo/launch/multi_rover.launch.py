@@ -40,8 +40,8 @@ def generate_launch_description():
                 ])
             ]),
             launch_arguments={
-                'namespace': 'slave/',
-                'prefix': 'slave',
+                'namespace': 'slave',
+                'frame_prefix': 'slave/',
                 'x':'-0.2',
                 
             }.items()
@@ -56,49 +56,33 @@ def generate_launch_description():
                 ])
             ]),
             launch_arguments={
-                'namespace': 'master/',
-                'prefix': 'master',
+                'namespace': 'master',
+                'frame_prefix': 'master/',
+                'tf_prefix' :'master',
                 'x':'0.6',
                 
             }.items()
     )
 
-    gz_ros2_bridge = Node(
-            package="ros_gz_bridge",
-            executable="parameter_bridge",
-            
-            arguments=[          
-                "/master/cmd_vel@geometry_msgs/msg/Twist@ignition.msgs.Twist",
-                "/slave/cmd_vel@geometry_msgs/msg/Twist@ignition.msgs.Twist",               
-                "clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock",
-                "/master/odom/wheels@nav_msgs/msg/Odometry@ignition.msgs.Odometry",
-                "/slave/odom/wheels@nav_msgs/msg/Odometry@ignition.msgs.Odometry",
-                "/master/tf@tf2_msgs/msg/TFMessage[ignition.msgs.Pose_V",          # @ is for a 1 to 1 conversion, [ is for a 1 to multiples conversion
-                "/slave/tf@tf2_msgs/msg/TFMessage[ignition.msgs.Pose_V",          # @ is for a 1 to 1 conversion, [ is for a 1 to multiples conversion
-                '/master/joint_states@sensor_msgs/msg/JointState[gz.msgs.Model',
-                '/slave/joint_states@sensor_msgs/msg/JointState[gz.msgs.Model',
-                '/master/scan@sensor_msgs/msg/LaserScan@gz.msgs.LaserScan',
-                '/slave/scan@sensor_msgs/msg/LaserScan@gz.msgs.LaserScan',
-                '/slave/imu/data@sensor_msgs/msg/Imu@gz.msgs.IMU',
-                '/master/imu/data@sensor_msgs/msg/Imu@gz.msgs.IMU',
-                
-
-                #camera topics (only master)
-                'master/color/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
-                'master/depth/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
-                'master/color/image_raw@sensor_msgs/msg/Image@ignition.msgs.Image',
-                'master/depth/color/points@sensor_msgs/msg/PointCloud2@ignition.msgs.PointCloudPacked',  
-                'slave/color/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
-                'slave/depth/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
-                'slave/color/image_raw@sensor_msgs/msg/Image@ignition.msgs.Image',
-                'slave/depth/color/points@sensor_msgs/msg/PointCloud2@ignition.msgs.PointCloudPacked',  
-
-
-
-            ],
-            
-        
-        )
+    
+    
+    # gz_ros2_bridge = Node(
+    #     package="ros_gz_bridge",
+    #     executable="parameter_bridge",
+    #     arguments=[
+    #         "/cmd_vel@geometry_msgs/msg/Twist@ignition.msgs.Twist",
+    #         "/clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock",
+    #         "/odom/wheels@nav_msgs/msg/Odometry@ignition.msgs.Odometry",
+    #         "/tf@tf2_msgs/msg/TFMessage[ignition.msgs.Pose_V",          # @ is for a 1 to 1 conversion, [ is for a 1 to multiples conversion
+    #         '/joint_states@sensor_msgs/msg/JointState[gz.msgs.Model',
+    #         '/scan@sensor_msgs/msg/LaserScan@gz.msgs.LaserScan',
+    #         '/imu/data@sensor_msgs/msg/Imu@gz.msgs.IMU',
+    #         '/color/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
+    #         '/depth/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
+    #         '/color/image_raw@sensor_msgs/msg/Image@ignition.msgs.Image',
+    #         '/depth/color/points@sensor_msgs/msg/PointCloud2@ignition.msgs.PointCloudPacked',
+    #     ],
+    # )
 
     
 
@@ -106,8 +90,8 @@ def generate_launch_description():
     return LaunchDescription([
         
         master,    
-        slave,     
+        # slave,     
         declare_world_cmd,
-        gz_ros2_bridge,
+        # gz_ros2_bridge,
         gz_sim,
     ])
