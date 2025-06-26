@@ -6,7 +6,9 @@
  
   <include file="$(find-pkg-share rover_bringup)/launch/slam_sim.launch.py"/>
  
-  <include file="$(find-pkg-share rover_bringup)/launch/navigation_sim.launch.py"/>
+  <include file="$(find-pkg-share rover_bringup)/launch/navigation_sim.launch.py">
+    <arg name="namespace" value="master"/>
+  </include>
   
   
  
