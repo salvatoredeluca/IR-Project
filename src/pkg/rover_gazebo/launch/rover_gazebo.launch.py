@@ -9,7 +9,8 @@ from launch.substitutions import Command, LaunchConfiguration, PathJoinSubstitut
 from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterValue
 
-
+from launch.conditions import IfCondition
+from launch.substitutions import PythonExpression
 
 def generate_launch_description():
     # Create the launch configuration variables
@@ -134,15 +135,7 @@ def generate_launch_description():
                 # '/master/imu/data@sensor_msgs/msg/Imu@gz.msgs.IMU',
                 
 
-                #camera topics (only master)
-                # 'master/color/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
-                # 'master/depth/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
-                # 'master/color/image_raw@sensor_msgs/msg/Image@ignition.msgs.Image',
-                # 'master/depth/color/points@sensor_msgs/msg/PointCloud2@ignition.msgs.PointCloudPacked',  
-                # 'slave/color/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
-                # 'slave/depth/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
-                # 'slave/color/image_raw@sensor_msgs/msg/Image@ignition.msgs.Image',
-                # 'slave/depth/color/points@sensor_msgs/msg/PointCloud2@ignition.msgs.PointCloudPacked',  
+               
             ],
             remappings=[
                             (['/model/', namespace, '/cmd_vel'],['/', namespace , '/cmd_vel']),
@@ -154,7 +147,21 @@ def generate_launch_description():
                         ],
             
         
-        )
+    )
+
+    gz_ros2_bridge_camera = Node(
+        package="ros_gz_bridge",
+        executable="parameter_bridge",
+        name='gz_camera_bridge',
+        condition=IfCondition(PythonExpression(["'", namespace, "' == 'master'"])),
+        arguments=[
+            'master/color/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
+            'master/depth/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
+            'master/color/image_raw@sensor_msgs/msg/Image@ignition.msgs.Image',
+            'master/depth/color/points@sensor_msgs/msg/PointCloud2@ignition.msgs.PointCloudPacked',
+        ]
+    )
+
     
     common_frame_publisher = Node(
                 package='tf2_ros',
@@ -210,6 +217,7 @@ def generate_launch_description():
     # ld.add_action(gz_sim)
     ld.add_action(gz_spawn_entity)
     ld.add_action(gz_ros2_bridge)
+    ld.add_action(gz_ros2_bridge_camera)
     ld.add_action(common_frame_publisher)
 
     # Launch Robot State Publisher

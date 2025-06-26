@@ -179,9 +179,9 @@
 
     <gazebo reference="${camera_base_frame}">
         <sensor name="d435_color" type="camera">
-            <!-- <topic>${namespace}/color/image_raw</topic>
+            <topic>${namespace}/color/image_raw</topic>
             <ignition_frame_id>${namespace}/camera_link</ignition_frame_id>
-            <gz_frame_id>${namespace}/camera_link</gz_frame_id> -->
+            <gz_frame_id>${namespace}/camera_link</gz_frame_id>
             <camera name="d435">
                 <!-- <camera_info_topic>${namespace}/color/camera_info</camera_info_topic> -->
                 <horizontal_fov>1.21126</horizontal_fov>
