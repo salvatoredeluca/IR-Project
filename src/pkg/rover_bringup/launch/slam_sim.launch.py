@@ -42,15 +42,22 @@ def generate_launch_description():
         executable='async_slam_toolbox_node',
         name='slam_toolbox',
 
-        # namespace='master/',
+        namespace='master',
         output='screen',
-        remappings=[('/map',['/master/map'])]
-        # remappings=[
+        remappings=[
             
-        #             ('/map', ['/master/map']),
-        #             ('/pose', ['/master/pose_slam']),
-        #             ('scan','scan')
-        #             ],
+                    ('/odom', '/maste/odom'),
+                    ('/map', '/master/map'),
+                    ('/pose', '/master/pose'),
+                    ('/scan','/master/scan'),
+                    ('/set_pose','/master/set_pose'),
+                    ('/slam_toolbox/feedback','/master/slam_toolbox/feedback'),
+                    ('/slam_toolbox/update','/master/slam_toolbox/update'),
+                    ('/slam_toolbox/graph_visualization','/master/slam_toolbox/graph_visualization'),
+                    ('/slam_toolbox/scan_visualization','/master/slam_toolbox/scan_visualization'),
+                    ('/odometry/filtered','/master/odometry/filtered'),
+                    ('/map_metadata','/master/map_metadata')
+                    ],
         
         
         # 

@@ -1,4 +1,4 @@
-slam_toolbox:
+master/slam_toolbox:
   ros__parameters:
 
     # Plugin params
@@ -14,7 +14,7 @@ slam_toolbox:
     odom_frame: master/odom
     map_frame: master/map
     base_frame: master/base_footprint
-    scan_topic: master/scan
+    scan_topic: scan
    
     #use_map_saver: true
     mode: mapping

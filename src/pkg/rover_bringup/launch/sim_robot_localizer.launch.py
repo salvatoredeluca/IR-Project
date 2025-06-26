@@ -29,13 +29,21 @@ def generate_launch_description():
     	executable='ekf_node',
     	name='ekf_filter_node',
     	output='screen',
-        # namespace='master/',
-        # remappings=[
+        namespace='master',
+        remappings=[
             
-        #             ('/map', ['/master/map']),
-        #             ('/pose', ['/master/pose_slam']),
-        #             ('/scan',['/master/scan'])
-        #             ],
+                    ('/odom', '/maste/odom'),
+                    ('/map', '/master/map'),
+                    ('/pose', '/master/pose'),
+                    ('/scan','/master/scan'),
+                    ('/set_pose','/master/set_pose'),
+                    ('/slam_toolbox/feedback','/master/slam_toolbox/feedback'),
+                    ('/slam_toolbox/update','/master/slam_toolbox/update'),
+                    ('/slam_toolbox/graph_visualization','/master/slam_toolbox/graph_visualization'),
+                    ('/slam_toolbox/scan_visualization','/master/slam_toolbox/scan_visualization'),
+                    ('/odometry/filtered','/master/odometry/filtered'),
+                    ('/map_metadata','/master/map_metadata')
+                    ],
 
     	parameters=[robot_localization_file_path, {'use_sim_time': use_sim_time}]
     	)
