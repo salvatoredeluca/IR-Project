@@ -9,7 +9,7 @@ source docker_build.sh ros2im
 ```sh
 source docker_run.sh ros2im ros2cont
 ```
-#Launch Gazebo
+# Launch Gazebo
 ```sh
 ros2 launch rover_gazebo multi_rover.launch.py
 ```
