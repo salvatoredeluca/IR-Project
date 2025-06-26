@@ -14,6 +14,11 @@ source docker_run.sh ros2im ros2cont
 ros2 launch rover_gazebo multi_rover.launch.py
 ```
 # Move the robot
+For the master
+```sh
+ros2 topic pub --rate 1 /master/cmd_vel geometry_msgs/msg/Twist "{linear: {x: -2.0, y: 0.0, z: 0.0}}"
+```
+For the slave
 ```sh
 ros2 topic pub --rate 1 /master/cmd_vel geometry_msgs/msg/Twist "{linear: {x: -2.0, y: 0.0, z: 0.0}}"
 ```
