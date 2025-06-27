@@ -27,5 +27,11 @@ Then on RVIZ you can assign a goal to both master and slave indipendently (by de
 ros2 launch rover_bringup rover_sim.launch
 ```
 
+# Make the slave follow the master
+
+```sh
+ros2 run rover_bringup simple_follower
+```
+
 
 

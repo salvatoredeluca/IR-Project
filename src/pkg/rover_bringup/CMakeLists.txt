@@ -62,8 +62,14 @@ nav2_package()
   )
 
 install(
-  DIRECTORY launch params maps config
+  DIRECTORY launch params maps config scripts
   DESTINATION share/${PROJECT_NAME}
+)
+
+install(PROGRAMS
+  scripts/simple_follower.py
+  DESTINATION lib/${PROJECT_NAME}
+  RENAME simple_follower
 )
 
 
