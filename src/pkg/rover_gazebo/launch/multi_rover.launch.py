@@ -90,7 +90,7 @@ def generate_launch_description():
     return LaunchDescription([
         
         master,    
-        # slave,     
+        slave,     
         declare_world_cmd,
         # gz_ros2_bridge,
         gz_sim,
