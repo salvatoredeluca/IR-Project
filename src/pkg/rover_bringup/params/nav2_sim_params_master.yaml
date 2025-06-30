@@ -3,7 +3,7 @@ bt_navigator:
     use_sim_time: True
     global_frame: master/map
     robot_base_frame: master/base_footprint
-    odom_topic: master/odom
+    odom_topic: /odom
     bt_loop_duration: 10
     default_server_timeout: 20
     # 'default_nav_through_poses_bt_xml' and 'default_nav_to_pose_bt_xml' are use defaults:
@@ -176,11 +176,12 @@ local_costmap:
       height: 6
       resolution: 0.05
       robot_radius: 0.3
-      plugins: ["voxel_layer", "gradient_layer"]
+      plugins: ["voxel_layer", "inflation_layer"] #"gradient_layer",,"obstacle_layer"
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         cost_scaling_factor: 10.0 
-        inflation_radius: 0.3
+        inflation_radius: 0.33
+        enabled: True
       gradient_layer:
         plugin: "costmap_plugin/GradientLayer"
         gradient_radius: 0.6
@@ -196,7 +197,7 @@ local_costmap:
         mark_threshold: 0
         observation_sources: scan
         scan:
-          topic: scan
+          topic: /master/scan
           max_obstacle_height: 2.0
           clearing: True
           marking: True
@@ -207,11 +208,15 @@ local_costmap:
           raytrace_min_range: 0.0
           obstacle_max_range: 2.5
           obstacle_min_range: 0.0
+      obstacle_layer:
+        plugin: "nav2_costmap_2d::ObstacleLayer"
+        enabled: True
+        observation_sources: scan
       # static_layer:
       #   plugin: "nav2_costmap_2d::StaticLayer"
       #   subscribe_to_updates: true
       #   map_subscribe_transient_local: True
-      always_send_full_costmap: True
+      # always_send_full_costmap: True
       qos_overrides:
         scan:
           reliability: SENSOR_DATA
@@ -228,7 +233,7 @@ global_costmap:
       robot_radius: 0.3
       resolution: 0.05
       track_unknown_space: true
-      plugins: [ "static_layer", "obstacle_layer", "gradient_layer"]      
+      plugins: [ "static_layer", "obstacle_layer", "inflation_layer" ] #   "gradient_layer"  
       static_layer:
         plugin: "nav2_costmap_2d::StaticLayer"
         subscribe_to_updates: true
@@ -239,7 +244,7 @@ global_costmap:
         footprint_clearing_enabled: True
         observation_sources: scan
         scan:
-          topic: scan
+          topic: /master/scan
           max_obstacle_height: 2.0
           clearing: True
           marking: True
@@ -251,9 +256,10 @@ global_costmap:
           obstacle_max_range: 2.5
           obstacle_min_range: 0.0
       inflation_layer:
+        enabled: True
         plugin: "nav2_costmap_2d::InflationLayer"
         cost_scaling_factor: 10.0 
-        inflation_radius: 0.4
+        inflation_radius: 0.33
       gradient_layer:
         plugin: "costmap_plugin/GradientLayer"
         gradient_radius: 0.6
@@ -349,7 +355,7 @@ velocity_smoother:
     min_velocity: [-0.3, 0.0, -2.0]
     max_accel: [0.1, 0.0, 1.0]
     max_decel: [-1.0, 0.0, -1.0]
-    odom_topic: "master/odom/wheels"
+    odom_topic: "master/odom"
     odom_duration: 0.1
     deadband_velocity: [0.0, 0.0, 0.0]
     velocity_timeout: 1.0
