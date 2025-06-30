@@ -18,7 +18,7 @@
        <arg name="ekf_params_file" value="$(find-pkg-share rover_bringup)/config/localization_ekf_slave.yaml"/>
   </include> 
 
-  <!-- <include file="$(find-pkg-share rover_bringup)/launch/rviz.launch.py"/> -->
+  <include file="$(find-pkg-share rover_bringup)/launch/rviz.launch.py"/>
     
    <include file="$(find-pkg-share rover_bringup)/launch/navigation_sim.launch.py">
     <arg name="namespace" value="master"/>

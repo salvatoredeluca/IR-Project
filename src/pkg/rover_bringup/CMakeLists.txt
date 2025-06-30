@@ -76,6 +76,13 @@ install(PROGRAMS
   RENAME follow_waypoints
  
 )
+install(PROGRAMS
+  scripts/simple_follower.py 
+  
+  DESTINATION lib/${PROJECT_NAME}
+  RENAME simple_follower
+ 
+)
 
 
 ament_package()
