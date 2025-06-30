@@ -171,7 +171,7 @@ def generate_launch_description():
                 namespace=namespace,
                 remappings=[],
                 parameters=[{'use_sim_time': use_sim_time}],
-                arguments=['0', '0', '0', '0', '0', '0', 'global',[namespace , '/map']])
+                arguments=[LaunchConfiguration('x'), '0', '0', '0', '0', '0', 'global', [namespace , '/map']])
 
 
     # gz_ros2_bridge = Node(

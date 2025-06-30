@@ -180,7 +180,7 @@ local_costmap:
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         cost_scaling_factor: 10.0 
-        inflation_radius: 0.33
+        inflation_radius: 0.3
         enabled: True
       gradient_layer:
         plugin: "costmap_plugin/GradientLayer"
@@ -232,11 +232,12 @@ global_costmap:
       plugins: [ "static_layer", "obstacle_layer", "inflation_layer"]      
       static_layer:
         plugin: "nav2_costmap_2d::StaticLayer"
+        enabled: False
         subscribe_to_updates: true
         map_subscribe_transient_local: True
       obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
-        enabled: True
+        enabled: False
         footprint_clearing_enabled: True
         observation_sources: scan
         scan:
@@ -252,10 +253,10 @@ global_costmap:
           obstacle_max_range: 2.5
           obstacle_min_range: 0.0
       inflation_layer:
-        enabled: True
+        enabled: False
         plugin: "nav2_costmap_2d::InflationLayer"
         cost_scaling_factor: 10.0 
-        inflation_radius: 0.33
+        inflation_radius: 0.3
       gradient_layer:
         plugin: "costmap_plugin/GradientLayer"
         gradient_radius: 0.6

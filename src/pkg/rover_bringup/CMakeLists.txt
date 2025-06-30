@@ -19,6 +19,9 @@ find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(tf2 REQUIRED)
 
+
+
+
 find_package(nav2_common REQUIRED)
 find_package(rclcpp_action REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
@@ -67,9 +70,11 @@ install(
 )
 
 install(PROGRAMS
-  scripts/simple_follower.py
+  scripts/follow_waypoints.py 
+  
   DESTINATION lib/${PROJECT_NAME}
-  RENAME simple_follower
+  RENAME follow_waypoints
+ 
 )
 
 

@@ -180,7 +180,7 @@ local_costmap:
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         cost_scaling_factor: 10.0 
-        inflation_radius: 0.33
+        inflation_radius: 0.3
         enabled: True
       gradient_layer:
         plugin: "costmap_plugin/GradientLayer"
@@ -259,7 +259,7 @@ global_costmap:
         enabled: True
         plugin: "nav2_costmap_2d::InflationLayer"
         cost_scaling_factor: 10.0 
-        inflation_radius: 0.33
+        inflation_radius: 0.3
       gradient_layer:
         plugin: "costmap_plugin/GradientLayer"
         gradient_radius: 0.6
@@ -351,10 +351,10 @@ velocity_smoother:
     smoothing_frequency: 10.0
     scale_velocities: False
     feedback: "OPEN_LOOP"
-    max_velocity: [0.3, 0.0, 2.0]
-    min_velocity: [-0.3, 0.0, -2.0]
-    max_accel: [0.1, 0.0, 1.0]
-    max_decel: [-1.0, 0.0, -1.0]
+    max_velocity: [0.5, 0.0, 2.0]
+    min_velocity: [-0.5, 0.0, -2.0]
+    max_accel: [0.2, 0.0, 1.0]
+    max_decel: [-2.0, 0.0, -2.0]
     odom_topic: "master/odom"
     odom_duration: 0.1
     deadband_velocity: [0.0, 0.0, 0.0]
