@@ -18,7 +18,7 @@ class SimpleFollower(Node):
         self.tf_listener = tf2_ros.TransformListener(self.tf_buffer, self)
         
         # Timer per aggiornare il goal del slave
-        self.timer = self.create_timer(2.0, self.follow_master)
+        self.timer = self.create_timer(0.8, self.follow_master)
         
         self.get_logger().info('Follower avviato')
 

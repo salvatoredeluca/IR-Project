@@ -1,90 +1,96 @@
 #!/usr/bin/env python3
 
+import rclpy
+from rclpy.node import Node
+from rclpy.duration import Duration
 from geometry_msgs.msg import PoseStamped
 from nav2_simple_commander.robot_navigator import BasicNavigator, TaskResult
-import rclpy
-from rclpy.duration import Duration
 from tf_transformations import quaternion_from_euler
 from ament_index_python.packages import get_package_share_directory
 import os
 import yaml
 
-waypoints_yaml_path=os.path.join(get_package_share_directory('rover_bringup'), "config", "waypoints.yaml")
-with open(waypoints_yaml_path, 'r') as yaml_file:
-        yaml_content = yaml.safe_load(yaml_file)
+class WaypointNavigatorNode(Node):
+    def __init__(self):
+        super().__init__('waypoint_navigator_node')
 
-def main():
-    rclpy.init()
-    
-    # Inizializza navigator con namespace
-    navigator = BasicNavigator(namespace='master')
-    
-    # Aspetta che Nav2 sia pronto (senza AMCL)
-    # navigator.waitUntilNav2Active(localizer='')
-    print("Nav2 è pronto!")
-    
+        self.get_logger().info('Inizializzo il navigatore Nav2...')
 
-    def create_pose(transform):
-        name= transform["name"]
-        pose = PoseStamped()
-        pose.header.frame_id = 'global'
-        pose.header.stamp = navigator.get_clock().now().to_msg()
-        pose.pose.position.x = transform["position"]["x"]
-        pose.pose.position.y = transform["position"]["y"]
-        pose.pose.position.z = transform["position"]["z"]
-        roll = transform["orientation"]["roll"]
-        pitch = transform["orientation"]["pitch"]
-        yaw = transform["orientation"]["yaw"]
-        quaternion = quaternion_from_euler(roll, pitch, yaw)
+        # Inizializza il BasicNavigator
+        self.navigator = BasicNavigator(namespace='master')
 
-        pose.pose.orientation.x = quaternion[0]
-        pose.pose.orientation.y = quaternion[1]
-        pose.pose.orientation.z = quaternion[2]
-        pose.pose.orientation.w = quaternion[3]
-        return pose, name
+        # Carica i waypoints dal file YAML
+        waypoints_yaml_path = os.path.join(
+            get_package_share_directory('rover_bringup'),
+            "config",
+            "waypoints.yaml"
+        )
+        with open(waypoints_yaml_path, 'r') as yaml_file:
+            yaml_content = yaml.safe_load(yaml_file)
 
-    goals = list(map(create_pose, yaml_content["waypoints"]))
-    goal_poses = []
+        # Prepara le pose
+        self.goal_poses = []
+        for transform in yaml_content["waypoints"]:
+            pose = PoseStamped()
+            pose.header.frame_id = 'global'
+            pose.header.stamp = self.navigator.get_clock().now().to_msg()
+            pose.pose.position.x = transform["position"]["x"]
+            pose.pose.position.y = transform["position"]["y"]
+            pose.pose.position.z = transform["position"]["z"]
+            roll = transform["orientation"]["roll"]
+            pitch = transform["orientation"]["pitch"]
+            yaw = transform["orientation"]["yaw"]
+            q = quaternion_from_euler(roll, pitch, yaw)
+            pose.pose.orientation.x = q[0]
+            pose.pose.orientation.y = q[1]
+            pose.pose.orientation.z = q[2]
+            pose.pose.orientation.w = q[3]
+            self.goal_poses.append(pose)
 
-    for pose,name in goals:
-        goal_poses.append(pose)
-    
-    
-    # Invia goal
-    nav_start = navigator.get_clock().now()
-    navigator.followWaypoints(goal_poses)
+        self.get_logger().info(f"Trovati {len(self.goal_poses)} waypoints, invio alla navigazione.")
 
-    i=0
-    while not navigator.isTaskComplete():
-    
-        i = i + 1
-        feedback = navigator.getFeedback()
+        # Avvia la navigazione
+        self.nav_start = self.navigator.get_clock().now()
+        self.navigator.followWaypoints(self.goal_poses)
 
-        if feedback and i % 5 == 0:
-            print('Executing current waypoint: ' +
-                  str(feedback.current_waypoint + 1) + '/' + str(len(goal_poses)))
-            now = navigator.get_clock().now()
+        # Crea un timer per monitorare lo stato periodicamente
+        self.timer = self.create_timer(1.0, self.navigation_feedback_cb)
 
-            # Some navigation timeout to demo cancellation
-            if now - nav_start > Duration(seconds=600):
-                navigator.cancelTask()
+        self.feedback_counter = 0
 
-    # Do something depending on the return code
-    result = navigator.getResult()
-    if result == TaskResult.SUCCEEDED:
-        print('Goal succeeded!')
-    elif result == TaskResult.CANCELED:
-        print('Goal was canceled!')
-    elif result == TaskResult.FAILED:
-        print('Goal failed!')
-    else:
-        print('Goal has an invalid return status!')
+    def navigation_feedback_cb(self):
+        # Se task è completo, fai shutdown
+        if self.navigator.isTaskComplete():
+            result = self.navigator.getResult()
+            if result == TaskResult.SUCCEEDED:
+                self.get_logger().info('Goal succeeded!')
+            elif result == TaskResult.CANCELED:
+                self.get_logger().warn('Goal was canceled!')
+            elif result == TaskResult.FAILED:
+                self.get_logger().error('Goal failed!')
+            else:
+                self.get_logger().error('Goal has invalid return status!')
+            rclpy.shutdown()
+            return
 
-    # navigator.lifecycleShutdown()
+        # Altrimenti, stampa il feedback ogni 5 chiamate
+        self.feedback_counter += 1
+        feedback = self.navigator.getFeedback()
+        if feedback and self.feedback_counter % 5 == 0:
+            self.get_logger().info(
+                f"Executing waypoint {feedback.current_waypoint + 1}/{len(self.goal_poses)}"
+            )
 
-    exit(0)
+        # Timeout per demo (esempio: 10 minuti)
+        now = self.navigator.get_clock().now()
+        if now - self.nav_start > Duration(seconds=600):
+            self.get_logger().warn('Navigation timed out. Cancelling task...')
+            self.navigator.cancelTask()
 
-  
+def main(args=None):
+    rclpy.init(args=args)
+    node = WaypointNavigatorNode()
+    rclpy.spin(node)
 
 if __name__ == '__main__':
     main()
