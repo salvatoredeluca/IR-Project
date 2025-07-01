@@ -71,7 +71,7 @@ controller_server:
   ros__parameters:
     use_sim_time: True
     odom_topic: master/odom
-    controller_frequency: 10.0 # was 20/50.0
+    controller_frequency: 5.0 # was 20/50.0
     min_x_velocity_threshold: 0.001
     min_y_velocity_threshold: 0.5
     min_theta_velocity_threshold: 0.001
@@ -166,8 +166,8 @@ controller_server:
 local_costmap:
   local_costmap:
     ros__parameters:
-      update_frequency: 10.0
-      publish_frequency: 5.0
+      update_frequency: 5.0
+      publish_frequency: 3.0
       global_frame: master/odom
       robot_base_frame: master/base_footprint
       use_sim_time: True
