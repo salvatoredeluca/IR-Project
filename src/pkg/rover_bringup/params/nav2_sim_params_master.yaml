@@ -1,7 +1,7 @@
 bt_navigator:
   ros__parameters:
     use_sim_time: True
-    global_frame: master/map
+    global_frame: global
     robot_base_frame: master/base_footprint
     odom_topic: /odom
     bt_loop_duration: 10
@@ -225,7 +225,7 @@ local_costmap:
 global_costmap:
   global_costmap:
     ros__parameters:
-      update_frequency: 2.0
+      update_frequency: 5.0
       publish_frequency: 1.0
       global_frame: master/map
       robot_base_frame: master/base_footprint
@@ -291,7 +291,7 @@ planner_server:
     planner_plugins: ["GridBased"]
     GridBased:
       plugin: "nav2_navfn_planner/NavfnPlanner"  # "nav2_straightline_planner/StraightLine" "nav2_astar_planner/AStarPlanner"
-      tolerance: 0.2
+      tolerance: 0.4
       use_astar: false
       allow_unknown: True
 
@@ -323,12 +323,14 @@ behavior_server:
       plugin: "nav2_behaviors/AssistedTeleop"
     global_frame: master/odom
     robot_base_frame: master/base_footprint
-    transform_tolerance: 0.1
+    transform_tolerance: 0.3
     use_sim_time: True
     simulate_ahead_time: 2.0
     max_rotational_vel: 2.0
     min_rotational_vel: 0.0
     rotational_acc_lim: 1.0
+    linear_acc_lim: 1
+    linear_decel_lim: 1
 
 robot_state_publisher:
   ros__parameters:
