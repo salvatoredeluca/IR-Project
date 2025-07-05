@@ -21,6 +21,7 @@ def generate_launch_description():
     # frame_prefix = LaunchConfiguration("frame_prefix")
     tf_prefix = LaunchConfiguration("tf_prefix")   
     x=LaunchConfiguration('x')
+    y=LaunchConfiguration('y')
     namespace = LaunchConfiguration('namespace') 
 
     declared_arguments = []
@@ -103,6 +104,7 @@ def generate_launch_description():
             "-allow_renaming", "true",
             "-z", "0.1",
             "-x",x,
+            "-y",y,
            
         ]
     )

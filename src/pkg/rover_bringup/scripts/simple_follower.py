@@ -52,13 +52,12 @@ class SmartFollower(Node):
             distance_to_master = math.sqrt(dx*dx + dy*dy)
 
             if distance_to_master <= self.follow_threshold:
-                # 🔄 Vicino al master: reset trail
+               
                 self.trail = []
                 self.current_index = 0
 
                 if distance_to_master <= self.stop_threshold:
-                    # 🚫 Troppo vicino: non mando nessun goal
-                    # Invia come goal la posizione corrente dello slave
+                   
                     self_pose = PoseStamped()
                     self_pose.header.frame_id = 'global'
                     self_pose.header.stamp = self.get_clock().now().to_msg()
@@ -70,12 +69,12 @@ class SmartFollower(Node):
                     self.get_logger().info(f'Slave è troppo vicino al master ({distance_to_master:.2f} m), si ancora in posizione')
                     return
                 else:
-                    # ✅ Vicino ma non troppo: mando la posizione del master
+                   
                     self.goal_pub.publish(master_pose)
                     self.get_logger().info(f'Seguo direttamente il master ({distance_to_master:.2f} m)')
                     return
 
-            # 📍 Lontano dal master: salva la posizione in trail se distante dall’ultima
+            
             if len(self.trail) == 0:
                 self.trail.append(master_pose)
             else:
@@ -87,7 +86,7 @@ class SmartFollower(Node):
                     self.trail.append(master_pose)
                     self.get_logger().info(f'Aggiunto punto alla trail ({master_pose.pose.position.x:.2f}, {master_pose.pose.position.y:.2f})')
 
-            # 🎯 Segui il goal corrente dalla trail
+            
             if len(self.trail) == 0:
                 self.get_logger().warn('Trail vuota, non posso seguire nulla')
                 return
@@ -107,6 +106,10 @@ class SmartFollower(Node):
 
         except Exception as e:
             self.get_logger().debug(f'Errore nel timer_callback: {e}')
+
+
+
+    
 
 
 def main():

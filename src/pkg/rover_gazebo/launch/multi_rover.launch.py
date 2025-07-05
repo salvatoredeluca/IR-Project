@@ -42,7 +42,7 @@ def generate_launch_description():
             launch_arguments={
                 'namespace': 'slave',
                 'frame_prefix': 'slave/',
-                'x':'-0.2',
+                'x':'0','y':'-0.2'
                 
             }.items()
     )
@@ -59,7 +59,7 @@ def generate_launch_description():
                 'namespace': 'master',
                 'frame_prefix': 'master/',
                 'tf_prefix' :'master',
-                'x':'0.6',
+                'x':'0.5', 'y':'0'
                 
             }.items()
     )

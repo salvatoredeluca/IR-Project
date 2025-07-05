@@ -259,7 +259,7 @@ global_costmap:
       inflation_layer:
         enabled: False
         plugin: "nav2_costmap_2d::InflationLayer"
-        cost_scaling_factor: 10.0 
+        cost_scaling_factor: 1.0 
         inflation_radius: 0.3
       gradient_layer:
         plugin: "costmap_plugin/GradientLayer"

@@ -27,11 +27,17 @@ Then on RVIZ you can assign a goal to both master and slave indipendently (by de
 ros2 launch rover_bringup rover_sim.launch
 ```
 
-# Make the slave follow the master
+# Launch the follow task
+After launching Gazebo+SLAM+NAV2, make the master follow the desired waypoints
 
+```sh
+ros2 run rover_bringup follow_waypoints
+```
+Then on another terminal paste this to make the slave follow the master
 ```sh
 ros2 run rover_bringup simple_follower
 ```
+
 
 
 
